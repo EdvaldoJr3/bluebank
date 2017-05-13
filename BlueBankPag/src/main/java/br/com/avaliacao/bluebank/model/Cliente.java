@@ -8,44 +8,47 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import br.com.avaliacao.bluebank.enums.Status;
 
-@Entity(name = "USUARIO")
-public class Usuario {
-
+@Entity(name = "CLIENTE")
+public class Cliente {
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	private Long id;
+
+	@NotNull
+	@Column(name = "NOME")
+	private String nome;
 	
 	@NotNull
 	@Column(name = "CPF")
 	private String cpf;
 	
-	@NotNull
-	@Column(name = "SENHA")
-	private String senha;
+	@Column(name = "ENDERECO")
+	private String endereco;
+	
+	@Column(name = "EMAIL")
+	private String email;
 	
 	@NotNull
-	@Column(name = "STATUS")
 	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "STATUS")
 	private Status status;
 	
 	@NotNull
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
 	
-	public Usuario(){
-		
-	}
+	@OneToOne(mappedBy = "cliente")
+	private ContaCorrente contaCorrente;
+	
+	public Cliente() {
 
-	public Usuario(String cpf, String senha, Status status) {
-		super();
-		this.cpf = cpf;
-		this.senha = senha;
-		this.status = status;
 	}
 
 	public Long getId() {
@@ -56,6 +59,14 @@ public class Usuario {
 		this.id = id;
 	}
 
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	public String getCpf() {
 		return cpf;
 	}
@@ -64,12 +75,20 @@ public class Usuario {
 		this.cpf = cpf;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getEndereco() {
+		return endereco;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Status getStatus() {
@@ -78,6 +97,14 @@ public class Usuario {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public LocalDateTime getDataAlteracao() {
+		return dataAlteracao;
+	}
+
+	public void setDataAlteracao(LocalDateTime dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 
 	@Override
@@ -97,7 +124,7 @@ public class Usuario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		Cliente other = (Cliente) obj;
 		if (cpf == null) {
 			if (other.cpf != null)
 				return false;
@@ -111,4 +138,11 @@ public class Usuario {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", email=" + email
+				+ ", status=" + status + ", dataAlteracao=" + dataAlteracao + "]";
+	}
+	
+	
 }
