@@ -1,14 +1,24 @@
 package br.com.avaliacao.bluebank.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.data.annotation.Transient;
 
 import br.com.avaliacao.bluebank.enums.Status;
 
@@ -21,11 +31,15 @@ public class Usuario {
 	private Long id;
 	
 	@NotNull
+	@CPF(message = "*Por Favor digite um CPF válido.")
+	@NotEmpty(message = "*O CPF é obrigatório")
 	@Column(name = "CPF")
 	private String cpf;
 	
 	@NotNull
+	@NotEmpty(message = "*Por favor digite a senha")
 	@Column(name = "SENHA")
+	@Transient
 	private String senha;
 	
 	@NotNull
@@ -36,7 +50,11 @@ public class Usuario {
 	@NotNull
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
-	
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
+
 	public Usuario(){
 		
 	}
@@ -78,6 +96,34 @@ public class Usuario {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public LocalDateTime getDataAlteracao() {
+		return dataAlteracao;
+	}
+	
+	public String getDataAlteracaoFormatada() {
+		String dataAlteracaoFormatada = "";
+		
+		if(dataAlteracao != null){
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+			
+			dataAlteracaoFormatada= dataAlteracao.format(formatter); 
+		}
+		
+		return dataAlteracaoFormatada;
+	}
+
+	public void setDataAlteracao(LocalDateTime dataAlteracao) {
+		this.dataAlteracao = dataAlteracao;
 	}
 
 	@Override
