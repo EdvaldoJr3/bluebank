@@ -1,5 +1,10 @@
 package br.com.avaliacao.bluebank.model;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -10,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import br.com.avaliacao.bluebank.enums.StatusTransferencia;
@@ -32,8 +38,11 @@ public class Transferencia {
 	
 	@NotNull
 	@Column(name = "VALOR")
-	private Double valor;
+	private BigDecimal valor;
 	
+	@Transient
+	private String valorFormatado;
+
 	@NotNull
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.ORDINAL)
@@ -78,11 +87,11 @@ public class Transferencia {
 		this.contaDestinoId = contaDestinoId;
 	}
 
-	public Double getValor() {
+	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(Double valor) {
+	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
 
@@ -111,6 +120,10 @@ public class Transferencia {
 	}
 
 	public ContaCorrente getContaOrigem() {
+		if(contaOrigem == null){
+			contaOrigem = new ContaCorrente();
+		}
+		
 		return contaOrigem;
 	}
 
@@ -119,11 +132,40 @@ public class Transferencia {
 	}
 
 	public ContaCorrente getContaDestino() {
+		if(contaDestino == null){
+			contaDestino = new ContaCorrente();
+		}
 		return contaDestino;
 	}
 
 	public void setContaDestino(ContaCorrente contaDestino) {
 		this.contaDestino = contaDestino;
+	}
+	
+	public String getValorFormatado() {
+		if(this.getValor() != null) {
+			BigDecimal valor = new BigDecimal (this.getValor().doubleValue());  
+			NumberFormat nf = NumberFormat.getCurrencyInstance();  
+			valorFormatado = nf.format (valor);
+		}
+		return valorFormatado;
+	}
+
+	public void setValorFormatado(String valorFormatado) throws ParseException {
+		
+		if(!valorFormatado.isEmpty()){
+			
+			DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+			symbols.setGroupingSeparator('.');
+			symbols.setDecimalSeparator(',');
+			String pattern = "#,##0.0#";
+			DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
+			decimalFormat.setParseBigDecimal(true);
+			
+			this.setValor((BigDecimal) decimalFormat.parse(valorFormatado));
+		}
+		
+		this.valorFormatado = valorFormatado;
 	}
 
 	@Override
