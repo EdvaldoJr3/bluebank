@@ -47,6 +47,7 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 	private static String MSG_SALDO_INSUFICIENTE = "Seu saldo é insuficiente!";
 	private static String MSG_TRANSFERENCIA_MESMO_CLIENTE = "Não é possível realizar transferência para a mesma conta.";
 	private static String MSG_ERRO_TRANSACAO = "Não foi possível realizar a transação no momento. Por favor, tente mais tarde.";
+	private static String MSG_VALOR_TRANSFERENCIA_MENOR_IGUAL_ZERO = "O valor da transferência deve ser maior que 0";
 
 	private static String MSG_OK = "ok";
 	private static Long TIPO_OPERACAO_CREDITO = 1L;
@@ -76,12 +77,19 @@ public class TransferenciaServiceImpl implements TransferenciaService {
 
 			LocalDateTime dataHoraTransacao = LocalDateTime.now();
 
-			// Bloqueando escrita nos registros de saldo
-			em.lock(saldoOrigem, LockModeType.PESSIMISTIC_WRITE);
-			em.lock(saldoDestino, LockModeType.PESSIMISTIC_WRITE);
+			if (transferencia.getValor().compareTo(new BigDecimal(0)) <= 0) {
 
+				return MSG_VALOR_TRANSFERENCIA_MENOR_IGUAL_ZERO;
+			}
+			
+			// Bloqueando escrita nos registros de saldo
+			   em.lock(saldoOrigem, LockModeType.PESSIMISTIC_WRITE);
+			   em.lock(saldoDestino, LockModeType.PESSIMISTIC_WRITE);
+			
 			BigDecimal novoSaldoOrigem = saldoOrigem.getValor().subtract(transferencia.getValor());
 
+			
+			
 			if (novoSaldoOrigem.compareTo(new BigDecimal(0)) < 0) {
 				// Liberando os registros de saldos para escrita
 				em.lock(saldoOrigem, LockModeType.NONE);

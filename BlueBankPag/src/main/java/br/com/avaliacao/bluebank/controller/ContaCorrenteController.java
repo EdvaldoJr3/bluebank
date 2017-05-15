@@ -52,8 +52,10 @@ public class ContaCorrenteController {
 	private ModelAndView criarRedirecionamentoTransferencia(ContaCorrente contaOrigem) {
 		StringBuilder dadosContaOrigem = new StringBuilder();
 		dadosContaOrigem.append("\nCliente: ").append(contaOrigem.getCliente().getNome());
+		dadosContaOrigem.append("\nSaldo atual: ").append(contaOrigem.getSaldo().getValorFormatado());
 		dadosContaOrigem.append("\nAg. ").append(contaOrigem.getAgencia().getNumero()).append("-").append(contaOrigem.getAgencia().getDigito());
 		dadosContaOrigem.append("\nConta ").append(contaOrigem.getNumero()).append("-").append(contaOrigem.getDigito());
+		
 		
 		Transferencia transferencia =  new Transferencia();
 		transferencia.setContaOrigemId(contaOrigem.getId());
