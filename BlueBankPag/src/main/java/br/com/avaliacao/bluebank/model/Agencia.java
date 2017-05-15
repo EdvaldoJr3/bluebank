@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import br.com.avaliacao.bluebank.enums.Status;
 
 @Entity
@@ -21,10 +23,12 @@ public class Agencia {
 	private Long id;
 	
 	@NotNull
+	@NotEmpty(message = "*Por favor informe o número da agência")
 	@Column(name = "NUMERO")
 	private Long numero;
 	
 	@NotNull
+	@NotEmpty(message = "*Por favor informe o dígito da agência")
 	@Column(name = "DIGITO")
 	private Long digito;
 	
@@ -36,6 +40,16 @@ public class Agencia {
 	@NotNull
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
+	
+	public Agencia() {
+		
+	}
+	
+	public Agencia(Long numero, Long digito) {
+		this.numero = numero;
+		this.digito = digito;
+		this.status = Status.ATIVO;
+	}
 
 	public Long getId() {
 		return id;
@@ -92,6 +106,12 @@ public class Agencia {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Agencia [id=" + id + ", numero=" + numero + ", digito=" + digito + ", status=" + status
+				+ ", dataAlteracao=" + dataAlteracao + "]";
 	}
 	
 }
