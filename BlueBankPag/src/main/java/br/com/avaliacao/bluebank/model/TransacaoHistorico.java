@@ -1,5 +1,6 @@
 package br.com.avaliacao.bluebank.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class TransacaoHistorico {
 
 	@NotNull
 	@Column(name = "VALOR")
-	private Double valor;
+	private BigDecimal valor;
 
 	@NotNull
 	@Column(name = "STATUS")
@@ -64,6 +65,22 @@ public class TransacaoHistorico {
 	@OneToOne
 	@JoinColumn(name = "TIPO_OPERACAO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	private TipoOperacao tipoOperacao;
+	
+	public TransacaoHistorico() {
+		
+	}
+
+	public TransacaoHistorico( Long contaOrigemId, Long contaDestinoId, LocalDateTime dataOperacao,
+			Long tipoOperacaoId, BigDecimal valor) {
+	
+		this.contaOrigemId = contaOrigemId;
+		this.contaDestinoId = contaDestinoId;
+		this.dataOperacao = dataOperacao;
+		this.tipoOperacaoId = tipoOperacaoId;
+		this.valor = valor;
+		this.statusTransferencia = StatusTransferencia.SUCESSO;
+		this.dataAlteracao = LocalDateTime.now();
+	}
 
 	public Long getId() {
 		return id;
@@ -97,11 +114,11 @@ public class TransacaoHistorico {
 		this.tipoOperacaoId = tipoOperacaoId;
 	}
 
-	public Double getValor() {
+	public BigDecimal getValor() {
 		return valor;
 	}
 
-	public void setValor(Double valor) {
+	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
 

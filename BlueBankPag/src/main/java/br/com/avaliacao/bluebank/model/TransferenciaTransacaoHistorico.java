@@ -36,6 +36,18 @@ public class TransferenciaTransacaoHistorico {
 	@OneToOne
 	@JoinColumn(name = "TRANSACAO_HISTORICO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	private TransacaoHistorico transacaoHistorico;
+	
+	public TransferenciaTransacaoHistorico(){
+		
+	}
+
+	public TransferenciaTransacaoHistorico(Long transferenciaId, Long transacaoHistoricoId,
+			LocalDateTime dataAlteracao) {
+		super();
+		this.transferenciaId = transferenciaId;
+		this.transacaoHistoricoId = transacaoHistoricoId;
+		this.dataAlteracao = dataAlteracao;
+	}
 
 	public Long getId() {
 		return id;
