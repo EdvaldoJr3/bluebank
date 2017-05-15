@@ -6,15 +6,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.avaliacao.bluebank.enums.Status;
 
-@Entity(name = "CONTA_CORRENTE")
+@Entity
+@Table(name = "CONTA_CORRENTE")
 public class ContaCorrente {
 	
 	@Id
@@ -31,9 +36,15 @@ public class ContaCorrente {
 	private Long agenciaId;
 	
 	@NotNull
+	@NotEmpty(message = "*Por favor informe o número da conta")
 	@Column(name = "NUMERO")
 	private Long numero;
 	
+	@NotNull
+	@NotEmpty(message = "*Por favor informe o dígito da conta")
+	@Column(name = "DIGITO")
+	private Long digito;
+
 	@NotNull
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.ORDINAL)
@@ -43,13 +54,27 @@ public class ContaCorrente {
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
 	
-	@OneToOne
+	@OneToOne(mappedBy="contaCorrente")
+	private ContaCorrenteSaldo saldo;
+	
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "CLIENTE_ID", referencedColumnName= "ID", insertable = false, updatable = false)
 	private Cliente cliente;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "AGENCIA_ID", referencedColumnName= "ID", insertable = false, updatable = false)
 	private Agencia agencia;
+	
+	public ContaCorrente(Long numero, Long digito) {
+		this.numero = numero;
+		this.digito = digito;
+		this.status = Status.ATIVO;
+	}
+	
+	public ContaCorrente() {
+
+	}
+	
 	
 	public Long getId() {
 		return id;
@@ -114,6 +139,26 @@ public class ContaCorrente {
 	public void setAgencia(Agencia agencia) {
 		this.agencia = agencia;
 	}
+	
+	public Long getDigito() {
+		return digito;
+	}
+
+	public void setDigito(Long digito) {
+		this.digito = digito;
+	}
+	
+	public ContaCorrenteSaldo getSaldo() {
+		return saldo;
+	}
+
+	public void setSaldo(ContaCorrenteSaldo saldo) {
+		this.saldo = saldo;
+	}
+	
+	public boolean exists(){
+		return (id != null && id > 0);
+	}
 
 	@Override
 	public int hashCode() {
@@ -121,6 +166,7 @@ public class ContaCorrente {
 		int result = 1;
 		result = prime * result + ((agenciaId == null) ? 0 : agenciaId.hashCode());
 		result = prime * result + ((clienteId == null) ? 0 : clienteId.hashCode());
+		result = prime * result + ((digito == null) ? 0 : digito.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
 		return result;
@@ -145,6 +191,11 @@ public class ContaCorrente {
 				return false;
 		} else if (!clienteId.equals(other.clienteId))
 			return false;
+		if (digito == null) {
+			if (other.digito != null)
+				return false;
+		} else if (!digito.equals(other.digito))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -161,8 +212,7 @@ public class ContaCorrente {
 	@Override
 	public String toString() {
 		return "ContaCorrente [id=" + id + ", clienteId=" + clienteId + ", agenciaId=" + agenciaId + ", numero="
-				+ numero + ", status=" + status + ", dataAlteracao=" + dataAlteracao + ", cliente=" + cliente
-				+ ", agencia=" + agencia + "]";
+				+ numero + ", digito=" + digito + ", status=" + status + ", dataAlteracao=" + dataAlteracao
+				+ ", cliente=" + cliente + ", agencia=" + agencia + "]";
 	}
-
 }
