@@ -2,7 +2,7 @@
 
 **Blue Bank** A aplicação demo está disponível no endereço https://bluebankriver.herokuapp.com
 
-##A solução utiliza:
+## A solução utiliza:
 
 - Spring MVC (Implementação do padrão MVC)
 - Spring Boot (Criação da aplicação)
@@ -10,7 +10,7 @@
 - JPA com Hibernate e Banco de dados MySQL (Camada de persistência)
 - Heroku Plugin (Facilita o deploy da aplicação na nuvem Heroku)
 
-Para acessar e realizar utilize os dados dos clientes a seguir. A senha para todos os clientes é 12345.
+## Para acessar e realizar utilize os dados dos clientes a seguir. A senha para todos os clientes é 12345.
 
 - Cliente: João Alberto	
 - CPF: 45657006542	
