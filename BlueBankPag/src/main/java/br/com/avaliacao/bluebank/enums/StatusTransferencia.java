@@ -1,8 +1,9 @@
 package br.com.avaliacao.bluebank.enums;
 
 public enum StatusTransferencia {
-	SUCESSO(1, "Sucesso"),
-	ERRO(0, "Erro");
+	
+	ERRO(0, "Erro"),
+	SUCESSO(1, "Sucesso");
 	
 	public int valor;
 	public String descricao;

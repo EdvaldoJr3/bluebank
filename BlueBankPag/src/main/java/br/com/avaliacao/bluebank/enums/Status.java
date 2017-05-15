@@ -2,8 +2,8 @@ package br.com.avaliacao.bluebank.enums;
 
 public enum Status {
 
-	ATIVO(1, "Ativo"),
-	INATIVO(0, "Inativo");
+	INATIVO(0, "Inativo"),
+	ATIVO(1, "Ativo");
 	
 	public int valor;
 	public String descricao;
