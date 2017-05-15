@@ -19,19 +19,19 @@ import br.com.avaliacao.bluebank.repository.UsuarioRepository;
 public class TestCommandLineRunner implements CommandLineRunner {
 
 	@Autowired
-	AgenciaRepository agenciaRepository;
+	private AgenciaRepository agenciaRepository;
 	
 	@Autowired
-	ClienteRepository clienteRepository;
+	private ClienteRepository clienteRepository;
 	
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	private UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	ContaCorrenteRepository contaCorrenteRepository;
+	private ContaCorrenteRepository contaCorrenteRepository;
 	
 	//@Autowired
-	//ContaCorrenteRepository contaCorrenteRepository;
+	//private ContaCorrenteRepository contaCorrenteRepository;
 	
 	@Override
 	public void run(String... arg0) throws Exception {
@@ -63,7 +63,7 @@ public class TestCommandLineRunner implements CommandLineRunner {
 			}
 		}
 		
-		Collection<ContaCorrente> contas = contaCorrenteRepository.findAll();
+		Collection<ContaCorrente> contas = (Collection<ContaCorrente>) contaCorrenteRepository.findAll();
 		
 		if(!contas.isEmpty()){
 			System.out.println("\n >>>>>>>> CONTAS <<<<<<<< ");
