@@ -2,35 +2,35 @@
 
 **Blue Bank** A aplicação demo está disponível no endereço https://bluebankriver.herokuapp.com
 
-A solução utiliza:
+##A solução utiliza:
 
--Spring MVC (Implementação do padrão MVC)
--Spring Boot (Criação da aplicação)
--Spring Security (Autenticação)
--JPA com Hibernate e Banco de dados MySQL (Camada de persistência)
--Heroku Plugin (Facilita o deploy da aplicação na nuvem Heroku)
+- Spring MVC (Implementação do padrão MVC)
+- Spring Boot (Criação da aplicação)
+- Spring Security (Autenticação)
+- JPA com Hibernate e Banco de dados MySQL (Camada de persistência)
+- Heroku Plugin (Facilita o deploy da aplicação na nuvem Heroku)
 
 Para acessar e realizar utilize os dados dos clientes a seguir. A senha para todos os clientes é 12345.
 
-Cliente: João Alberto	
-CPF: 45657006542	
-Agência: 101112-1	
-Conta: 505152-1
+- Cliente: João Alberto	
+- CPF: 45657006542	
+- Agência: 101112-1	
+- Conta: 505152-1
 
-Cliente : Maria Clara	
-CPF : 94704634477	
-Agência :202122-2	
-Conta: 606162-2
+- Cliente : Maria Clara	
+- CPF : 94704634477	
+- Agência :202122-2	
+- Conta: 606162-2
 
-Cliente: Claudio Luiz	
-CPF: 22987703015	
-Agência: 303132-3	
-Conta: 707172-3
+- Cliente: Claudio Luiz	
+- CPF: 22987703015	
+- Agência: 303132-3	
+- Conta: 707172-3
 
-Cliente: Roberta Miranda	
-CPF: 31825535850	
-Agência: 404142-4	
-Conta: 808182-4
+- Cliente: Roberta Miranda	
+- CPF: 31825535850	
+- Agência: 404142-4	
+- Conta: 808182-4
 
 
 
