@@ -1,16 +1,25 @@
 package br.com.avaliacao.bluebank.model;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import br.com.avaliacao.bluebank.enums.StatusTransferencia;
 
-@Entity(name = "VIEW_HISTORICO_TRANSACAO")
+@Entity
+@Table(name = "VIEW_HISTORICO_TRANSACAO")
 public class ViewHistoricoTransacao {
 	
 	@Id
@@ -25,6 +34,9 @@ public class ViewHistoricoTransacao {
 	@Column(name = "DATA_OPERACAO")
 	private LocalDateTime dataOperacao;
 	
+	@Column(name = "VALOR")
+	private BigDecimal valor;
+
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.ORDINAL)
 	private StatusTransferencia statusTransferencia;
@@ -34,6 +46,17 @@ public class ViewHistoricoTransacao {
 	
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "CONTA_ID", referencedColumnName= "ID", insertable = false, updatable = false)
+	private ContaCorrente conta;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "TIPO_OPERACAO_ID", referencedColumnName= "ID", insertable = false, updatable = false)
+	private TipoOperacao tipoOperacao;
+	
+	@Transient
+	private String valorFormatado;
 
 	public Long getId() {
 		return id;
@@ -89,6 +112,55 @@ public class ViewHistoricoTransacao {
 
 	public void setDataAlteracao(LocalDateTime dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
+	}
+	
+	public BigDecimal getValor() {
+		return valor;
+	}
+
+	public void setValor(BigDecimal valor) {
+		this.valor = valor;
+	}
+	
+	public String getValorFormatado() {
+		if(this.getValor() != null) {
+			BigDecimal valor = new BigDecimal (this.getValor().doubleValue());  
+			NumberFormat nf = NumberFormat.getCurrencyInstance();  
+			valorFormatado = nf.format (valor);
+		}
+		return valorFormatado;
+	}
+	
+	public void setValorFormatado(String valorFormatado){
+		this.valorFormatado = valorFormatado;
+	}
+
+	public ContaCorrente getConta() {
+		return conta;
+	}
+
+	public void setConta(ContaCorrente conta) {
+		this.conta = conta;
+	}
+
+	public TipoOperacao getTipoOperacao() {
+		return tipoOperacao;
+	}
+
+	public void setTipoOperacao(TipoOperacao tipoOperacao) {
+		this.tipoOperacao = tipoOperacao;
+	}
+	
+	public String getDataAlteracaoFormatada() {
+		String dataAlteracaoFormatada = "";
+		
+		if(dataAlteracao != null){
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+			
+			dataAlteracaoFormatada= dataAlteracao.format(formatter); 
+		}
+		
+		return dataAlteracaoFormatada;
 	}
 
 	@Override
