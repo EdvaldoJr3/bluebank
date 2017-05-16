@@ -2,6 +2,7 @@ package br.com.avaliacao.bluebank.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -66,6 +68,9 @@ public class TransacaoHistorico {
 	@JoinColumn(name = "TIPO_OPERACAO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	private TipoOperacao tipoOperacao;
 	
+	@OneToMany(mappedBy = "transacaoHistorico")
+	private Collection<TransferenciaTransacaoHistorico> transacoes;
+
 	public TransacaoHistorico() {
 		
 	}
@@ -177,6 +182,14 @@ public class TransacaoHistorico {
 
 	public void setDataOperacao(LocalDateTime dataOperacao) {
 		this.dataOperacao = dataOperacao;
+	}
+	
+	public Collection<TransferenciaTransacaoHistorico> getTransacoes() {
+		return transacoes;
+	}
+
+	public void setTransacoes(Collection<TransferenciaTransacaoHistorico> transacoes) {
+		this.transacoes = transacoes;
 	}
 
 	@Override

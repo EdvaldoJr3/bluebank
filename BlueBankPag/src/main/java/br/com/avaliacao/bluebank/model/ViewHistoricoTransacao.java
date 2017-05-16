@@ -21,39 +21,60 @@ import br.com.avaliacao.bluebank.enums.StatusTransferencia;
 @Entity
 @Table(name = "VIEW_HISTORICO_TRANSACAO")
 public class ViewHistoricoTransacao {
-	
+
 	@Id
 	private Long id;
-	
+
 	@Column(name = "CONTA_ID")
 	private Long contaId;
-	
+
 	@Column(name = "TIPO_OPERACAO_ID")
 	private Long tipoOperacaoId;
-	
+
 	@Column(name = "DATA_OPERACAO")
 	private LocalDateTime dataOperacao;
-	
+
 	@Column(name = "VALOR")
 	private BigDecimal valor;
 
 	@Column(name = "STATUS")
 	@Enumerated(EnumType.ORDINAL)
 	private StatusTransferencia statusTransferencia;
-	
+
 	@Column(name = "MSG_STATUS")
 	private String mensagemStatus;
-	
+
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "CONTA_ID", referencedColumnName= "ID", insertable = false, updatable = false)
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CONTA_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	private ContaCorrente conta;
-	
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name = "TIPO_OPERACAO_ID", referencedColumnName= "ID", insertable = false, updatable = false)
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "TIPO_OPERACAO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	private TipoOperacao tipoOperacao;
+
+	@Column(name = "CPF_OPERACAO")
+	private String cpfOperacao;
+	
+	@Column(name = "NOME_CLIENTE_OPERACAO")
+	private String nomeClienteOperacao;
+	
+	@Transient
+	private String dadosContaOperacao;
+
+	@Column(name = "AGENCIA_NUMERO")
+	private String agenciaNumero;
+	
+	@Column(name = "AGENCIA_DIGITO")
+	private String agenciaDigito;
+	
+	@Column(name = "CONTA_NUMERO")
+	private String contaNumero;
+	
+	@Column(name = "CONTA_DIGITO")
+	private String contaDigito;
 	
 	@Transient
 	private String valorFormatado;
@@ -113,7 +134,7 @@ public class ViewHistoricoTransacao {
 	public void setDataAlteracao(LocalDateTime dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
 	}
-	
+
 	public BigDecimal getValor() {
 		return valor;
 	}
@@ -121,17 +142,17 @@ public class ViewHistoricoTransacao {
 	public void setValor(BigDecimal valor) {
 		this.valor = valor;
 	}
-	
+
 	public String getValorFormatado() {
-		if(this.getValor() != null) {
-			BigDecimal valor = new BigDecimal (this.getValor().doubleValue());  
-			NumberFormat nf = NumberFormat.getCurrencyInstance();  
-			valorFormatado = nf.format (valor);
+		if (this.getValor() != null) {
+			BigDecimal valor = new BigDecimal(this.getValor().doubleValue());
+			NumberFormat nf = NumberFormat.getCurrencyInstance();
+			valorFormatado = nf.format(valor);
 		}
 		return valorFormatado;
 	}
-	
-	public void setValorFormatado(String valorFormatado){
+
+	public void setValorFormatado(String valorFormatado) {
 		this.valorFormatado = valorFormatado;
 	}
 
@@ -150,17 +171,81 @@ public class ViewHistoricoTransacao {
 	public void setTipoOperacao(TipoOperacao tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
 	}
-	
+
 	public String getDataAlteracaoFormatada() {
 		String dataAlteracaoFormatada = "";
-		
-		if(dataAlteracao != null){
+
+		if (dataAlteracao != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-			
-			dataAlteracaoFormatada= dataAlteracao.format(formatter); 
+
+			dataAlteracaoFormatada = dataAlteracao.format(formatter);
+		}
+
+		return dataAlteracaoFormatada;
+	}
+
+	public String getCpfOperacao() {
+		return cpfOperacao;
+	}
+	
+	public void setCpfOperacao(String cpfOperacao) {
+		this.cpfOperacao = cpfOperacao;
+	}
+
+	public String getNomeClienteOperacao() {
+		return nomeClienteOperacao;
+	}
+
+	public void setNomeClienteOperacao(String nomeClienteOperacao) {
+		this.nomeClienteOperacao = nomeClienteOperacao;
+	}
+
+	public String getDadosContaOperacao() {
+		
+		if(dadosContaOperacao == null || dadosContaOperacao.isEmpty()){
+			StringBuilder sb =  new StringBuilder();
+			sb.append("Agencia ").append(getAgenciaNumero()).append("-").append(getAgenciaDigito());
+			sb.append(" / Conta ").append(getContaNumero()).append("-").append(getContaDigito());
+			dadosContaOperacao = sb.toString();
 		}
 		
-		return dataAlteracaoFormatada;
+		return dadosContaOperacao;
+	}
+
+	public void setDadosContaOperacao(String dadosContaOperacao) {
+		this.dadosContaOperacao = dadosContaOperacao;
+	}
+
+	public String getAgenciaNumero() {
+		return agenciaNumero;
+	}
+
+	public void setAgenciaNumero(String agenciaNumero) {
+		this.agenciaNumero = agenciaNumero;
+	}
+
+	public String getAgenciaDigito() {
+		return agenciaDigito;
+	}
+
+	public void setAgenciaDigito(String agenciaDigito) {
+		this.agenciaDigito = agenciaDigito;
+	}
+
+	public String getContaNumero() {
+		return contaNumero;
+	}
+
+	public void setContaNumero(String contaNumero) {
+		this.contaNumero = contaNumero;
+	}
+
+	public String getContaDigito() {
+		return contaDigito;
+	}
+
+	public void setContaDigito(String contaDigito) {
+		this.contaDigito = contaDigito;
 	}
 
 	@Override

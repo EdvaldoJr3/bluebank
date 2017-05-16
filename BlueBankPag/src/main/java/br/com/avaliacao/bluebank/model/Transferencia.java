@@ -6,6 +6,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -22,7 +24,6 @@ import br.com.avaliacao.bluebank.enums.StatusTransferencia;
 
 @Entity
 public class Transferencia {
-
 	
 	@Id
 	@GeneratedValue
@@ -62,6 +63,9 @@ public class Transferencia {
 	@OneToOne
 	@JoinColumn(name = "CONTA_DESTINO_ID", referencedColumnName= "ID", insertable = false, updatable = false)
 	private ContaCorrente contaDestino;
+	
+	@OneToMany(mappedBy = "transferencia")
+	private Collection<TransferenciaTransacaoHistorico> transacoes;
 
 	public Long getId() {
 		return id;
@@ -166,6 +170,14 @@ public class Transferencia {
 		}
 		
 		this.valorFormatado = valorFormatado;
+	}
+	
+	public Collection<TransferenciaTransacaoHistorico> getTransacoes() {
+		return transacoes;
+	}
+
+	public void setTransacoes(Collection<TransferenciaTransacaoHistorico> transacoes) {
+		this.transacoes = transacoes;
 	}
 
 	@Override

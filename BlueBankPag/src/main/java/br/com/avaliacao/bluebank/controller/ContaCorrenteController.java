@@ -76,13 +76,14 @@ public class ContaCorrenteController {
 		
 		String resultado = transferenciaService.transferir(transferencia);
 		
-		ContaCorrente contaOrigem = contaCorrenteService.findById(contaOrigemId);
+		ContaCorrente contaOrigem = null;
 
 		if(resultado.startsWith(OK)){
 			modelAndView.setViewName("/admin/home");
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			Usuario usuario = usuarioService.findByCpf(auth.getName());
 			Cliente cliente =  clienteService.findByCpf(usuario.getCpf());
+			contaOrigem = contaCorrenteService.findByCliente(cliente);
 			
 			modelAndView.addObject("contaOrigem", contaOrigem);
 			modelAndView.addObject("userName", "Bem vindo, " + cliente.getNome());
@@ -90,9 +91,8 @@ public class ContaCorrenteController {
 			modelAndView.addObject("transacoes", viewHistoricoTransacaoService.findByConta(contaOrigem));
 			modelAndView.addObject("contaDestino", new ContaCorrente());
 			modelAndView.addObject("msgSucessoTransferencia", "Transferência efetuada!");
-			
 		}else{
-			
+			contaOrigem = contaCorrenteService.findById(contaOrigemId);
 			modelAndView = criarRedirecionamentoTransferencia(contaOrigem);
 			modelAndView.addObject("msgStatusTransferencia", resultado);
 		}

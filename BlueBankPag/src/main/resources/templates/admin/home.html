@@ -44,10 +44,13 @@
 			                <table class="table table-sm table-striped table-hover table-bordered">
 			                    <thead>
 			                    	<tr>
-			                    		<th colspan="3" align="center">Últimas transações</th>
+			                    		<th colspan="6" align="center">Últimas transações</th>
 			                    	</tr>
 			                        <tr>
 			                            <th>Tipo Operação</th>
+			                            <th>CPF</th>
+			                            <th>Nome</th>
+			                            <th>Dados da Conta</th>
 			                            <th>Valor</th>
 			                            <th>Data</th>
 			                            
@@ -56,6 +59,9 @@
 			                    <tbody>
 			                       <tr th:each="transacao : ${transacoes}">
 			                            <td th:text="${transacao.tipoOperacao.descricao}"></td>
+			                            <td th:text="${transacao.cpfOperacao}"></td>
+			                            <td th:text="${transacao.nomeClienteOperacao}"></td>
+			                            <td th:text="${transacao.dadosContaOperacao}"></td>
 			                            <td th:text="${transacao.valorFormatado}"></td>
 			                            <td th:text="${transacao.dataAlteracaoFormatada}"></td>
 			                        </tr>

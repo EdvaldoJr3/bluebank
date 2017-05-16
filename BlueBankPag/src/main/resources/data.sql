@@ -101,21 +101,39 @@ VALUES ('4', '4', now(), '40000', '1');
 
  DROP VIEW IF EXISTS `view_historico_transacao`;
 
- CREATE VIEW `view_historico_transacao` AS 
- select `transacao_historico`.`ID` AS `ID`,`transacao_historico`.`CONTA_ORIGEM_ID` AS `CONTA_ID`,
-        `transacao_historico`.`TIPO_OPERACAO_ID` AS `TIPO_OPERACAO_ID`,`transacao_historico`.`DATA_OPERACAO` AS `DATA_OPERACAO`,
-        `transacao_historico`.`VALOR` AS `VALOR`,
-        `transacao_historico`.`STATUS` AS `STATUS`,
-        `transacao_historico`.`MSG_STATUS` AS `MSG_STATUS`,
-        `transacao_historico`.`DATA_ALTERACAO` AS `DATA_ALTERACAO`,'DEBITO' AS `DESCRICAO_OPERACAO` 
- from `transacao_historico` where (`transacao_historico`.`TIPO_OPERACAO_ID` = 2) 
- union 
- select `transacao_historico`.`ID` AS `ID`,`transacao_historico`.`CONTA_DESTINO_ID` AS `CONTA_ID`,
- 		`transacao_historico`.`TIPO_OPERACAO_ID` AS `TIPO_OPERACAO_ID`,`transacao_historico`.`DATA_OPERACAO` AS `DATA_OPERACAO`,
- 		`transacao_historico`.`VALOR` AS `VALOR`,
- 		`transacao_historico`.`STATUS` AS `STATUS`,`transacao_historico`.`MSG_STATUS` AS `MSG_STATUS`,
- 		`transacao_historico`.`DATA_ALTERACAO` AS `DATA_ALTERACAO`,'CREDITO' AS `DESCRICAO_OPERACAO` 
- from `transacao_historico` where (`transacao_historico`.`TIPO_OPERACAO_ID` = 1);
-
+CREATE VIEW `view_historico_transacao` AS 
+select
+    th.id AS ID, th.conta_origem_id AS CONTA_ID, th.tipo_operacao_id AS TIPO_OPERACAO_ID,
+    th.data_operacao AS DATA_OPERACAO, th.valor AS VALOR, th.status AS STATUS,
+    cli.cpf as CPF_OPERACAO, cli.nome as NOME_CLIENTE_OPERACAO, ag.numero as AGENCIA_NUMERO,
+    ag.digito as AGENCIA_DIGITO, conta.numero as CONTA_NUMERO, conta.digito as CONTA_DIGITO,
+    th.msg_status AS MSG_STATUS, th.data_alteracao AS DATA_ALTERACAO, 'Débito' AS DESCRICAO_OPERACAO
+from
+    transacao_historico as th, transferencia_transacao_historico as tth,
+    transferencia as transf, conta_corrente as conta,
+    cliente cli, agencia as ag
+where th.id = tth.transacao_historico_id
+and transf.id = tth.transferencia_id
+and transf.conta_destino_id = conta.id
+and cli.id = conta.cliente_id
+and conta.agencia_id = ag.id
+and th.tipo_operacao_id = 2
+UNION
+select
+    th.id AS ID, th.conta_destino_id AS CONTA_ID, th.tipo_operacao_id AS TIPO_OPERACAO_ID,
+    th.data_operacao AS DATA_OPERACAO, th.valor AS VALOR, th.status AS STATUS,
+    cli.cpf as CPF_OPERACAO, cli.nome as NOME_CLIENTE_OPERACAO, ag.numero as AGENCIA_NUMERO,
+    ag.digito as AGENCIA_DIGITO, conta.numero as CONTA_NUMERO, conta.digito as CONTA_DIGITO,
+    th.msg_status AS MSG_STATUS, th.data_alteracao AS DATA_ALTERACAO, 'Crédito' AS DESCRICAO_OPERACAO
+from
+    transacao_historico as th, transferencia_transacao_historico as tth,
+    transferencia as transf, conta_corrente as conta,
+    cliente cli, agencia as ag
+where th.id = tth.transacao_historico_id
+and transf.id = tth.transferencia_id
+and transf.conta_origem_id = conta.id
+and cli.id = conta.cliente_id
+and conta.agencia_id = ag.id
+and th.tipo_operacao_id = 1
 
 */

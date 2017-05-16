@@ -17,7 +17,6 @@ public class ViewHistoricoTransacaoServiceImpl implements ViewHistoricoTransacao
 
 	@Override
 	public Collection<ViewHistoricoTransacao> findByConta(ContaCorrente conta) {
-		// TODO Auto-generated method stub
 		return viewHistoricoTransacaoDao.findByConta(conta);
 	}
 
