@@ -3,7 +3,6 @@
 select 1;
 
 /*
-
 INSERT INTO `role` VALUES (1,'ADMIN');
 
 --TIPO OPERACAO
