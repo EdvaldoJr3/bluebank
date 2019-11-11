@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import br.com.avaliacao.bluebank.enums.Status;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity(name = "CLIENTE")
 public class Cliente {
@@ -22,16 +23,22 @@ public class Cliente {
 	private Long id;
 
 	@NotNull
+	@NotEmpty
 	@Column(name = "NOME")
 	private String nome;
 	
 	@NotNull
+	@NotEmpty
 	@Column(name = "CPF")
 	private String cpf;
-	
+
+	@NotNull
+	@NotEmpty
 	@Column(name = "ENDERECO")
 	private String endereco;
-	
+
+	@NotNull
+	@NotEmpty
 	@Column(name = "EMAIL")
 	private String email;
 	

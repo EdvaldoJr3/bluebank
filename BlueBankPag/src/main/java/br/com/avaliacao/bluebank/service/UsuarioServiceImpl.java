@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import br.com.avaliacao.bluebank.model.UsuarioRole;
+import br.com.avaliacao.bluebank.repository.UsuarioRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 	private RoleRepository roleRepository;
 
 	@Autowired
+	private UsuarioRoleRepository usuarioRoleRepository;
+
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
@@ -37,9 +42,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuario.setSenha(bCryptPasswordEncoder.encode(usuario.getSenha()));
 		usuario.setStatus(Status.ATIVO);
 		usuario.setDataAlteracao(LocalDateTime.now());
-		Role userRole = roleRepository.findByRole("ADMIN");
-		usuario.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+
+		//usuario.setRoles(new HashSet<Role>(Arrays.asList(role)));
 		usuarioRepository.save(usuario);
+
+		Role role = roleRepository.findByRole("ADMIN");
+		UsuarioRole usuarioRole = new UsuarioRole(usuario, role);
+		usuarioRoleRepository.save(usuarioRole);
 
 	}
 

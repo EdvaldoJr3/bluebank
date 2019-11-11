@@ -17,9 +17,44 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import br.com.avaliacao.bluebank.enums.StatusTransferencia;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.Subselect;
 
 @Entity
-@Table(name = "VIEW_HISTORICO_TRANSACAO")
+@Immutable
+@Subselect("select\n" +
+		"    th.id AS ID, th.conta_origem_id AS CONTA_ID, th.tipo_operacao_id AS TIPO_OPERACAO_ID,\n" +
+		"    th.data_operacao AS DATA_OPERACAO, th.valor AS VALOR, th.status AS STATUS,\n" +
+		"    cli.cpf as CPF_OPERACAO, cli.nome as NOME_CLIENTE_OPERACAO, ag.numero as AGENCIA_NUMERO,\n" +
+		"    ag.digito as AGENCIA_DIGITO, conta.numero as CONTA_NUMERO, conta.digito as CONTA_DIGITO,\n" +
+		"    th.msg_status AS MSG_STATUS, th.data_alteracao AS DATA_ALTERACAO, 'Débito' AS DESCRICAO_OPERACAO\n" +
+		"from\n" +
+		"    transacao_historico as th, transferencia_transacao_historico as tth,\n" +
+		"    transferencia as transf, conta_corrente as conta,\n" +
+		"    cliente cli, agencia as ag\n" +
+		"where th.id = tth.transacao_historico_id\n" +
+		"and transf.id = tth.transferencia_id\n" +
+		"and transf.conta_destino_id = conta.id\n" +
+		"and cli.id = conta.cliente_id\n" +
+		"and conta.agencia_id = ag.id\n" +
+		"and th.tipo_operacao_id = 2\n" +
+		"UNION\n" +
+		"select\n" +
+		"    th.id AS ID, th.conta_destino_id AS CONTA_ID, th.tipo_operacao_id AS TIPO_OPERACAO_ID,\n" +
+		"    th.data_operacao AS DATA_OPERACAO, th.valor AS VALOR, th.status AS STATUS,\n" +
+		"    cli.cpf as CPF_OPERACAO, cli.nome as NOME_CLIENTE_OPERACAO, ag.numero as AGENCIA_NUMERO,\n" +
+		"    ag.digito as AGENCIA_DIGITO, conta.numero as CONTA_NUMERO, conta.digito as CONTA_DIGITO,\n" +
+		"    th.msg_status AS MSG_STATUS, th.data_alteracao AS DATA_ALTERACAO, 'Crédito' AS DESCRICAO_OPERACAO\n" +
+		"from\n" +
+		"    transacao_historico as th, transferencia_transacao_historico as tth,\n" +
+		"    transferencia as transf, conta_corrente as conta,\n" +
+		"    cliente cli, agencia as ag\n" +
+		"where th.id = tth.transacao_historico_id\n" +
+		"and transf.id = tth.transferencia_id\n" +
+		"and transf.conta_origem_id = conta.id\n" +
+		"and cli.id = conta.cliente_id\n" +
+		"and conta.agencia_id = ag.id\n" +
+		"and th.tipo_operacao_id = 1\n")
 public class ViewHistoricoTransacao {
 
 	@Id
