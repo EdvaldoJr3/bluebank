@@ -39,4 +39,14 @@ public class ContaCorrenteServiceImpl implements ContaCorrenteService {
 		return contaCorrenteDao.buscarPorAgenciaConta(contaCorrente);
 	}
 
+	@Override
+	public void salvar(ContaCorrente conta) {
+		contaCorrenteRepository.save(conta);
+	}
+
+	@Override
+	public void gerarNumeroConta(ContaCorrente contaCorrente, Long agenciaId) throws Exception {
+		contaCorrenteDao.gerarNumeroConta(contaCorrente, agenciaId);
+	}
+
 }

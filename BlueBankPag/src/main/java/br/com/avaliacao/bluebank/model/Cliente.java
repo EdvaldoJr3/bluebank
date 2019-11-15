@@ -2,15 +2,10 @@ package br.com.avaliacao.bluebank.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import br.com.avaliacao.bluebank.dto.ClienteDTO;
 import br.com.avaliacao.bluebank.enums.Status;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -51,11 +46,25 @@ public class Cliente {
 	@Column(name = "DATA_ALTERACAO")
 	private LocalDateTime dataAlteracao;
 	
-	@OneToOne(mappedBy = "cliente")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID", referencedColumnName= "CLIENTE_ID",  insertable = false, updatable = false)
 	private ContaCorrente contaCorrente;
-	
+
+	@OneToOne(fetch= FetchType.LAZY)
+	@JoinColumn(name = "ID", referencedColumnName= "CLIENTE_ID",  insertable = false, updatable = false)
+	private Usuario usuario	;
+
 	public Cliente() {
 
+	}
+
+	public Cliente(ClienteDTO dto) {
+		this.setNome(dto.getNome());
+		this.setEndereco(dto.getEndereco());
+		this.setCpf(dto.getCpf());
+		this.setEmail(dto.getEmail());
+		this.setStatus(Status.ATIVO);
+		this.setDataAlteracao(LocalDateTime.now());
 	}
 
 	public Long getId() {
@@ -112,6 +121,14 @@ public class Cliente {
 
 	public void setDataAlteracao(LocalDateTime dataAlteracao) {
 		this.dataAlteracao = dataAlteracao;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override
