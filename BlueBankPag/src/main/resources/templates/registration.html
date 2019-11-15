@@ -17,32 +17,32 @@
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<form autocomplete="off" action="#" th:action="@{/registration}"
-					th:object="${usuario}" method="post" class="form-horizontal"
+					th:object="${clienteDTO}" method="post" class="form-horizontal"
 					role="form">
 					<h2>Registration Form</h2>
 					<div class="form-group">
 						<div class="col-sm-9">
-							<label th:if="${#fields.hasErrors('cliente.nome')}" th:errors="*{cliente.nome}"
+							<label th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"
 								   class="validation-message"></label>
-							<input type="text" th:field="*{cliente.nome}" placeholder="Nome"
+							<input type="text" th:field="*{nome}" placeholder="Nome"
 								   class="form-control" />
 						</div>
 					</div>
 
 					<div class="form-group">
 						<div class="col-sm-9">
-							<label th:if="${#fields.hasErrors('cliente.endereco')}" th:errors="*{cliente.endereco}"
+							<label th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}"
 								   class="validation-message"></label>
-							<input type="text" th:field="*{cliente.endereco}" placeholder="Endereço"
+							<input type="text" th:field="*{endereco}" placeholder="Endereço"
 								   class="form-control" />
 						</div>
 					</div>
 
 					<div class="form-group">
 						<div class="col-sm-9">
-							<label th:if="${#fields.hasErrors('cliente.email')}" th:errors="*{cliente.email}"
+							<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 								   class="validation-message"></label>
-							<input type="text" th:field="*{cliente.email}" placeholder="E-mail"
+							<input type="text" th:field="*{email}" placeholder="E-mail"
 								   class="form-control" />
 						</div>
 					</div>
@@ -64,6 +64,16 @@
 								class="validation-message"></label>
 						</div>
 					</div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label class="validation-message">Agência</label>
+                            <select type="text" th:field="*{agenciaId}" class="form-control">
+                                <option value="" selected="selected">Selecione uma Agência</option>
+                                <option th:each="agencia : ${agencias}" th:value="${agencia.id}" th:text="${agencia.numero}"></option>
+                            </select>
+                        </div>
+                    </div>
 
 					<div class="form-group">
 						<div class="col-sm-9">

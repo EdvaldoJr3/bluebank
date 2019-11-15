@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import br.com.avaliacao.bluebank.model.ContaCorrente;
 
+import java.util.Random;
+
 @Repository
 public class ContaCorrenteDao {
 
@@ -45,4 +47,22 @@ public class ContaCorrenteDao {
 		return contaCorrenteResultado;
 	}
 
+	public void gerarNumeroConta(ContaCorrente contaCorrente, Long agenciaId) throws Exception {
+		StringBuilder query = new StringBuilder();
+		Long proximoNumero = 0L;
+
+		query.append(" select max(numero) + 1 from ContaCorrente c where c.agenciaId = :agenciaId");
+
+		Query queryTQ = em.createQuery(query.toString());
+		queryTQ.setParameter("agenciaId", agenciaId);
+
+		try {
+			proximoNumero = (Long) queryTQ.getSingleResult();
+		} catch (Exception e) {
+			throw new Exception("Não foi possível gerar o número da sua conta corrente", e);
+		}
+
+		contaCorrente.setNumero(proximoNumero);
+		contaCorrente.setDigito(Long.valueOf(new Random().nextInt(10)));
+	}
 }

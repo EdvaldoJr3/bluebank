@@ -11,4 +11,8 @@ public interface ContaCorrenteService {
 	public ContaCorrente findByCliente(Cliente cliente);
 	public ContaCorrente findById(Long id);
 	public ContaCorrente obterContaPorAgenciaNumero(ContaCorrente contaDestino);
+
+    public void salvar(ContaCorrente conta);
+    public void gerarNumeroConta(ContaCorrente contaCorrente, Long agenciaId) throws Exception;
+
 }

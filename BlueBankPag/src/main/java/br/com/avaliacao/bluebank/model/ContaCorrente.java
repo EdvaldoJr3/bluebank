@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import br.com.avaliacao.bluebank.dto.ClienteDTO;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import br.com.avaliacao.bluebank.enums.Status;
@@ -35,13 +36,11 @@ public class ContaCorrente {
 	@Column(name = "AGENCIA_ID")
 	private Long agenciaId;
 	
-	@NotNull
-	@NotEmpty(message = "*Por favor informe o número da conta")
+	@NotNull(message = "*Por favor informe o número da conta")
 	@Column(name = "NUMERO")
 	private Long numero;
 	
-	@NotNull
-	@NotEmpty(message = "*Por favor informe o dígito da conta")
+	@NotNull(message = "*Por favor informe o dígito da conta")
 	@Column(name = "DIGITO")
 	private Long digito;
 
@@ -74,8 +73,15 @@ public class ContaCorrente {
 	public ContaCorrente() {
 
 	}
-	
-	
+
+	public ContaCorrente(ClienteDTO dto) {
+		this.setAgenciaId(dto.getAgenciaId());
+		this.setNumero(dto.getNumeroConta());
+		this.setDataAlteracao(LocalDateTime.now());
+		this.setStatus(Status.ATIVO);
+	}
+
+
 	public Long getId() {
 		return id;
 	}
