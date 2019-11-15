@@ -2,6 +2,7 @@ package br.com.avaliacao.bluebank.controller;
 
 import javax.validation.Valid;
 
+import br.com.avaliacao.bluebank.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,8 @@ import br.com.avaliacao.bluebank.repository.ClienteRepository;
 import br.com.avaliacao.bluebank.service.ContaCorrenteService;
 import br.com.avaliacao.bluebank.service.UsuarioService;
 import br.com.avaliacao.bluebank.service.ViewHistoricoTransacaoService;
+
+import java.time.LocalDateTime;
 
 @Controller
 public class LoginController {
@@ -60,8 +63,20 @@ public class LoginController {
 					.rejectValue("cpf", "error.user",
 							"CPF já registrado!");
 		}
+
+		Cliente clienteExists = clienteRepository.findByCpf(usuario.getCpf());
+
+		if(clienteExists == null){
+			usuario.getCliente().setCpf(usuario.getCpf());
+			usuario.getCliente().setDataAlteracao(LocalDateTime.now());
+			usuario.getCliente().setStatus(Status.ATIVO);
+			clienteRepository.save(usuario.getCliente());
+		}else{
+			usuario.setCliente(clienteExists);
+		}
 	
 		usuarioService.salvar(usuario);
+
 		modelAndView.addObject("successMessage", "Usuário registrado com sucesso!!");
 		modelAndView.addObject("user", new Usuario());
 		modelAndView.setViewName("registration");

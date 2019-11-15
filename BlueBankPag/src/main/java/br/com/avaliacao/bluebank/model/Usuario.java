@@ -4,16 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -29,7 +20,10 @@ public class Usuario {
 	@GeneratedValue
 	@Column(name = "ID")
 	private Long id;
-	
+
+	@Column(name = "CLIENTE_ID")
+	private Long clienteId;
+
 	@NotNull
 	@CPF(message = "*Por Favor digite um CPF válido.")
 	@NotEmpty(message = "*O CPF é obrigatório")
@@ -54,6 +48,10 @@ public class Usuario {
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usuario_role", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
+
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "CLIENTE_ID", referencedColumnName= "ID",  insertable = false, updatable = false)
+	private Cliente cliente;
 
 	public Usuario(){
 		
@@ -104,6 +102,14 @@ public class Usuario {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public LocalDateTime getDataAlteracao() {
