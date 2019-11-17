@@ -3,7 +3,6 @@ package br.com.avaliacao.bluebank.controller;
 import javax.validation.Valid;
 
 import br.com.avaliacao.bluebank.dto.ClienteDTO;
-import br.com.avaliacao.bluebank.enums.Status;
 import br.com.avaliacao.bluebank.model.*;
 import br.com.avaliacao.bluebank.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.avaliacao.bluebank.repository.ClienteRepository;
-
-import java.time.LocalDateTime;
 
 @Controller
 public class LoginController {
@@ -57,20 +55,23 @@ public class LoginController {
 
 	public Agencia agencia;
 	
-	
 	@RequestMapping(value="/registration", method = RequestMethod.GET)
 	public ModelAndView registration(){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("clienteDTO", new ClienteDTO());
-		modelAndView.addObject("agencias", agenciaService.findAll());
 
-		modelAndView.setViewName("registration");
-		return modelAndView;
+		return redirectPage(modelAndView);
 	}
 	
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
-	public ModelAndView createNewUser(@Valid ClienteDTO dto, BindingResult bindingResult) {
+	public ModelAndView createNewUser(@Valid ClienteDTO dto, Errors errors, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("registration");
+
+		if(errors.hasErrors()){
+			return redirectPage(modelAndView);
+		}
+
 		Usuario usuario = new Usuario(dto);
 		Cliente cliente = new Cliente(dto);
         ContaCorrente contaCorrente =  new ContaCorrente(dto);
@@ -114,7 +115,6 @@ public class LoginController {
 
 		modelAndView.addObject("successMessage", "Usuário registrado com sucesso!!");
 		modelAndView.addObject("clienteDTO", dto);
-		modelAndView.setViewName("registration");
 			
 		return modelAndView;
 	}
@@ -139,4 +139,10 @@ public class LoginController {
 	}
 	
 
+	public ModelAndView redirectPage(ModelAndView modelAndView){
+		modelAndView.addObject("agencias", agenciaService.findAll());
+		modelAndView.setViewName("registration");
+
+		return modelAndView;
+	}
 }
