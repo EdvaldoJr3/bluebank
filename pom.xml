@@ -6,6 +6,8 @@
 	<groupId>br.com.avaliacao.bluebank</groupId>
 	<artifactId>BlueBankPag</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
 
 	<name>BlueBankPag</name>
 	<description>Projeto de Avaliação BlueBank</description>
