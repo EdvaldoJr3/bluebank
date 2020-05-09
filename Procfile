@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -jar $WEBAPP_RUNNER_OPTS --port 39818 target/BlueBankPag-0.0.1-SNAPSHOT.jar
