@@ -47,9 +47,7 @@ public class ContaCorrenteSaldo {
 	private  String valorFormatado;
 	
 	public ContaCorrenteSaldo() {
-		this.setValor(new BigDecimal(10));
-		this.setVersao(1L);
-		this.setDataAlteracao(LocalDateTime.now());
+
 	}
 
 	public Long getId() {

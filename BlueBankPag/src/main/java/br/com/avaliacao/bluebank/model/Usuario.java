@@ -7,7 +7,6 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import br.com.avaliacao.bluebank.dto.ClienteDTO;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.annotation.Transient;
@@ -65,14 +64,7 @@ public class Usuario {
 		this.status = status;
 	}
 
-    public Usuario(ClienteDTO dto) {
-		this.setCpf(dto.getCpf());
-		this.setSenha(dto.getSenha());
-		this.setDataAlteracao(LocalDateTime.now());
-		this.setStatus(Status.ATIVO);
-    }
-
-    public Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -118,14 +110,6 @@ public class Usuario {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-
-	public Long getClienteId() {
-		return clienteId;
-	}
-
-	public void setClienteId(Long clienteId) {
-		this.clienteId = clienteId;
 	}
 
 	public LocalDateTime getDataAlteracao() {
