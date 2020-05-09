@@ -1,0 +1,1 @@
+web: java -jar -Dserver.port=$PORT target/BlueBankPag-0.0.1-SNAPSHOT.war
