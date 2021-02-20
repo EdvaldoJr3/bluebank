@@ -1,6 +1,6 @@
 # Blue Bank - Demo!
 
-**Blue Bank** A aplicação demo está disponível no endereço https://bluebankriver.herokuapp.com
+**Blue Bank** A aplicação demo está disponível no endereço https://bluebankedvaldo.herokuapp.com/
 
 ## A solução utiliza:
 
