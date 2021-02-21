@@ -1,7 +1,7 @@
 DROP PROCEDURE IF EXISTS GetRoles;
 
 
-DELIMITER //
+DELIMITER
 CREATE PROCEDURE GetRoles ()
 BEGIN
 	DECLARE qtd INT DEFAULT 0;
@@ -122,8 +122,7 @@ BEGIN
         VALUES ('4', '4', now(), '40000', '1');
         COMMIT;
 	END IF;
-END //
-DELIMITER ;
+END;
 
 
-call GetRoles;
+CALL GetRoles;
